@@ -9,11 +9,11 @@ interface Distinguishable
     /**
      * @return null|string
      */
-   public function getId(): ?string;
+   public function getId();
 
     /**
      * @param string $id
      */
-   public function setId(string $id): void;
+   public function setId($id);
 
 }

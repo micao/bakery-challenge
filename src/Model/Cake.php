@@ -12,6 +12,8 @@ class Cake
 
     protected $filling;
 
+    protected $cremeFlavor;
+
     /**
      * @return mixed
      */
@@ -76,21 +78,39 @@ class Cake
         $this->filling = $filling;
     }
 
-    public function __construct($type, $pastry, $topping, $filling)
+    /**
+     * @return mixed
+     */
+    public function getCremeFlavor()
+    {
+        return $this->cremeFlavor;
+    }
+
+    /**
+     * @param mixed $cremeFlavor
+     */
+    public function setCremeFlavor($cremeFlavor)
+    {
+        $this->cremeFlavor = $cremeFlavor;
+    }
+
+    public function __construct($type, $pastry, $topping, $filling, $cremeFlavor)
     {
         $this->type = $type;
         $this->pastry = $pastry;
         $this->topping = $topping;
         $this->filling = $filling;
+        $this->cremeFlavor = $cremeFlavor;
     }
 
     public function toArray()
     {
         return [
-            'type'      => $this->type,
-            'pastry'    => $this->pastry,
-            'topping'   => $this->topping,
-            'filling'   => $this->filling,
+            'type'          => $this->type,
+            'pastry'        => $this->pastry,
+            'topping'       => $this->topping,
+            'filling'       => $this->filling,
+            'cremeFlavor'   => $this->cremeFlavor,
         ];
     }
 }

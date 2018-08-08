@@ -36,6 +36,10 @@ class Service {
         $app->get('/welcome', "Optimy\\OnlineBakery\\Controller\\WelcomeController::welcome");
         $app->get('/', "Optimy\\OnlineBakery\\Controller\\IndexController::index");
         $app->get('/api/cakes', "Optimy\\OnlineBakery\\Controller\\OrderController::proposeTenCakes");
+        $app->get('/api/cakes/{type}', "Optimy\\OnlineBakery\\Controller\\OrderController::proposeTenCakesByType");
+        $app->post('/api/cakes/order', "Optimy\\OnlineBakery\\Controller\\OrderController::orderCakes");
+        $app->get('/api/cakes/order/{order_id}', "Optimy\\OnlineBakery\\Controller\\OrderController::checkOrderById");
+        $app->put('/api/cakes/order/{order_id}', "Optimy\\OnlineBakery\\Controller\\OrderController::changeOrderById");
 
     }
 

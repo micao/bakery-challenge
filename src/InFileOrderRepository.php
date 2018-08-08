@@ -8,8 +8,8 @@ use Ramsey\Uuid\Uuid;
 class InFileOrderRepository
 {
 
-    private const DIRECTORY = 'storage';
-    private const FILE_SUFFIX = '.store';
+    const DIRECTORY = 'storage';
+    const FILE_SUFFIX = '.store';
 
     public function save(Distinguishable $order)
     {
@@ -21,14 +21,14 @@ class InFileOrderRepository
         file_put_contents($this->composeFileNameFor($order->getId()), serialize($order));
     }
 
-    public function load(string $orderId)
+    public function load($orderId)
     {
         $fileName = $this->composeFileNameFor($orderId);
 
         return unserialize(file_get_contents($fileName));
     }
 
-    private function composeFileNameFor(string $orderId)
+    private function composeFileNameFor($orderId)
     {
         $fileName = $orderId . static::FILE_SUFFIX;
 
