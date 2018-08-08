@@ -35,7 +35,7 @@ class Service {
         //Request::setTrustedProxies(array('127.0.0.1'));
         $app->get('/welcome', "Optimy\\OnlineBakery\\Controller\\WelcomeController::welcome");
         $app->get('/', "Optimy\\OnlineBakery\\Controller\\IndexController::index");
-        $app->get('/api/cake', "Optimy\\OnlineBakery\\Controller\\OrderController::order");
+        $app->get('/api/cakes', "Optimy\\OnlineBakery\\Controller\\OrderController::proposeTenCakes");
 
     }
 

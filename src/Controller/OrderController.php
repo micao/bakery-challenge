@@ -6,9 +6,32 @@ use Silex\Application;
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\JsonResponse;
 use \Symfony\Component\HttpFoundation\Response;
+use Optimy\OnlineBakery\Model\Cakes\Cupcakes as Cupcakes;
+use Optimy\OnlineBakery\Model\Cakes\Eclairs as Eclairs;
+use Optimy\OnlineBakery\Model\Cakes\MilleFeuilles as MilleFeuilles;
+use Optimy\OnlineBakery\Model\Cakes\CheeseCake as CheeseCake;
 
 class OrderController
 {
+    const NUM_OF_PROPOSED_CAKE = 10;
+    const TYPE_OF_CAKES = ['Cupcakes','Eclairs','MilleFeuilles','CheeseCake'];
+
+    private function returnClass($className)
+    {
+        switch ($className) {
+            case 'Cupcakes':
+                return new Cupcakes();
+            case 'Eclairs':
+                return new Eclairs();
+            case 'MilleFeuilles':
+                return new MilleFeuilles();
+            case 'CheeseCake':
+                return new CheeseCake();
+            default:
+                return new \stdClass();
+        }
+    }
+
     /**
      * GET /api/cakes
      * @param Request     $request
@@ -17,27 +40,15 @@ class OrderController
      */
     public function proposeTenCakes(Request $request, Application $app)
     {
-        $responseBody = [
-            'message' => "Welcome, this is home page!",
-            'user_ip' => $request->getClientIp()
-        ];
-        /*
-                if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
-                    $data = json_decode($request->getContent(), true);
-                    $request->request->replace(is_array($data) ? $data : array());
-                }
-        */
-        $post = array(
-            'title' => $request->request->get('title'),
-            'body' => $request->request->get('body'),
-        );
+        $responseBody = [];
+        for($i = 0 ; $i<self::NUM_OF_PROPOSED_CAKE ; $i++) {
+            $randomNum = rand(0, (count(self::TYPE_OF_CAKES) - 1));
+            $className = (String)self::TYPE_OF_CAKES[$randomNum];
+            $tmp = $this->returnClass($className);
+            $responseBody[] = $tmp->toArray();
+        }
 
-        $responseBody = [
-            'message' => "Welcome, this is home page!",
-            'user_ip' => $request->getClientIp()
-        ];
-
-        return new JsonResponse($post, Response::HTTP_OK);
+        return new JsonResponse($responseBody, Response::HTTP_OK);
     }
 
     /**

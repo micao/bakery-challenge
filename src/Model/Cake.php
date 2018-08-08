@@ -1,16 +1,16 @@
 <?php
 
-namespace Optimy\OnlineBakery\Services;
+namespace Optimy\OnlineBakery\Model;
 
 class Cake
 {
-    private $type;
+    protected $type;
 
-    private $pastry;
+    protected $pastry;
 
-    private $topping;
+    protected $topping;
 
-    private $filling;
+    protected $filling;
 
     /**
      * @return mixed
@@ -82,5 +82,15 @@ class Cake
         $this->pastry = $pastry;
         $this->topping = $topping;
         $this->filling = $filling;
+    }
+
+    public function toArray()
+    {
+        return [
+            'type'      => $this->type,
+            'pastry'    => $this->pastry,
+            'topping'   => $this->topping,
+            'filling'   => $this->filling,
+        ];
     }
 }
