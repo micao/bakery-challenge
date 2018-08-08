@@ -1,6 +1,6 @@
 <?php
 
-namespace Optimy\OnlineBakery;
+namespace Optimy\OnlineBakery\Controller;
 
 use Silex\Application;
 use \Symfony\Component\HttpFoundation\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Optimy\OnlineBakery;
+namespace Optimy\OnlineBakery\Services;
 
 use Silex\Application;
 use Silex\Provider\HttpFragmentServiceProvider;
@@ -16,7 +16,7 @@ class Service {
         $app->run();
     }
 
-    protected function setup(): Application
+    protected function setup()
     {
         $app = new Application();
         $app->register(new HttpFragmentServiceProvider());
@@ -33,8 +33,9 @@ class Service {
     protected function setupRouting(Application $app)
     {
         //Request::setTrustedProxies(array('127.0.0.1'));
-
-        $app->get('/', [WelcomeController::class , 'welcome']);
+        $app->get('/welcome', "Optimy\\OnlineBakery\\Controller\\WelcomeController::welcome");
+        $app->get('/', "Optimy\\OnlineBakery\\Controller\\IndexController::index");
+        $app->get('/api/cake', "Optimy\\OnlineBakery\\Controller\\OrderController::order");
 
     }
 
