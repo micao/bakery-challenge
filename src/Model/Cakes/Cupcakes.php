@@ -32,7 +32,7 @@ class Cupcakes extends Cake
             $response['error'] = 'No filling to choose for Cupcakes !';
         }
 
-        if ($flavor && !in_array(strtolower($flavor), ['coffee', 'lemon', 'orange', 'vanilla'])) {
+        if ($flavor && !in_array(strtolower($flavor), ['plain', 'coffee', 'lemon', 'orange', 'vanilla'])) {
             $response['success'] = false;
             $response['error'] = 'Choice of flavor is not exist !';
         }

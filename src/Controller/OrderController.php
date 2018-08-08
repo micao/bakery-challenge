@@ -12,6 +12,8 @@ use Optimy\OnlineBakery\Model\Cakes\Eclairs as Eclairs;
 use Optimy\OnlineBakery\Model\Cakes\MilleFeuilles as MilleFeuilles;
 use Optimy\OnlineBakery\Model\Cakes\CheeseCake as CheeseCake;
 use Optimy\OnlineBakery\Model\Order;
+use Optimy\OnlineBakery\Model\OrderStatus;
+use Optimy\OnlineBakery\InFileOrderRepository;
 
 class OrderController
 {
@@ -20,6 +22,24 @@ class OrderController
     const TYPE_OF_TOPPING = ['ICING', 'BUTTER CREME', 'WHIPPED CREME'];
     const TYPE_OF_CREME = ['BUTTER CREME','WHIPPED CREME'];
     const TYPE_OF_FLAVOR = ['PLAIN', 'COFFEE', 'LEMON', 'ORANGE', 'VANILLA'];
+
+    private $order;
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
 
     /**
      * Return instance of a class by argument
@@ -44,8 +64,34 @@ class OrderController
 
     private function createOrder($preOrder)
     {
-        $order = new Order();
-        $
+        try {
+            $order = new Order();
+            $order->setDetail($preOrder);
+            $order->setStatus(OrderStatus::STATUS_ORDERED);
+            $order->setStatusCode(OrderStatus::CODE[OrderStatus::STATUS_ORDERED]);
+
+            $this->order = $order;
+
+            $fp = new InFileOrderRepository();
+            $fp->save($order);
+        } catch (Exception $e) {
+            error_log(print_r($e->getMessage(), true));
+        }
+    }
+
+    private function findOrderById($orderId)
+    {
+        try {
+            $fp = new InFileOrderRepository();
+            $orderObj = $fp->load($orderId);
+            if ($orderObj instanceof Order) {
+                return $orderObj;
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            error_log(print_r($e->getMessage(), true));
+        }
     }
 
     /**
@@ -129,7 +175,51 @@ class OrderController
      */
     public function orderCakes(Request $request, Application $app)
     {
-        return new JsonResponse(null, Response::HTTP_OK);
+        $responseBody = [];
+        $data = null;
+        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+            $data = $request->getContent();
+        }
+        $data = json_decode($data);
+        foreach ($data as $row) {
+            switch (strtolower($row->type)) {
+                case 'cheesecake':
+                    $return = CheeseCake::checkPossible($row->pastry, $row->topping, $row->filling, $row->cremeFlavor);
+                    if (!$return['success']) {
+                        $responseBody[] = $return['error'];
+                        $responseBody[] = $row->type;
+                        return new JsonResponse($responseBody, Response::HTTP_OK);
+                    }
+                    break;
+                case 'cupcakes':
+                    $return = Cupcakes::checkPossible($row->pastry, $row->topping, $row->filling, $row->cremeFlavor);
+                    if (!$return['success']) {
+                        $responseBody[] = $return['error'];
+                        $responseBody[] = $row->type;
+                        return new JsonResponse($responseBody, Response::HTTP_OK);
+                    }
+                    break;
+                case 'eclairs':
+                    $return = Eclairs::checkPossible($row->pastry, $row->topping, $row->filling, $row->cremeFlavor);
+                    if (!$return['success']) {
+                        $responseBody[] = $return['error'];
+                        $responseBody[] = $row->type;
+                        return new JsonResponse($responseBody, Response::HTTP_OK);
+                    }
+                    break;
+                case 'millefeuilles':
+                    $return = MilleFeuilles::checkPossible($row->pastry, $row->topping, $row->filling, $row->cremeFlavor);
+                    if (!$return['success']) {
+                        $responseBody[] = $return['error'];
+                        $responseBody[] = $row->type;
+                        return new JsonResponse($responseBody, Response::HTTP_OK);
+                    }
+                    break;
+            }
+        }
+        $responseBody = $data;
+        $this->createOrder($responseBody);
+        return new JsonResponse($responseBody, Response::HTTP_OK);
     }
 
     /**
@@ -138,9 +228,14 @@ class OrderController
      * @param Application $app
      * @return JsonResponse
      */
-    public function checkOrderById(Request $request, Application $app)
+    public function checkOrderById($order_id, Request $request, Application $app)
     {
-        return new JsonResponse(null, Response::HTTP_OK);
+        $responseBody = [];
+        $order = $this->findOrderById($order_id);
+        if ($order) {
+            $responseBody = $order->getDetail();
+        }
+        return new JsonResponse($responseBody, Response::HTTP_OK);
     }
 
     /**
@@ -149,8 +244,16 @@ class OrderController
      * @param Application $app
      * @return JsonResponse
      */
-    public function changeOrderById(Request $request, Application $app)
+    public function changeOrderById($order_id, Request $request, Application $app)
     {
+        $responseBody = [];
+        $order = $this->findOrderById($order_id);
+        if ($order) {
+            $order->setStatus(OrderStatus::STATUS_ONGOING);
+            $order->setStatusCode(OrderStatus::CODE[OrderStatus::STATUS_ONGOING]);
+            $responseBody[] = $order->getDetail();
+            $responseBody[] = $order->getStatus();
+        }
         return new JsonResponse(null, Response::HTTP_OK);
     }
 }
