@@ -75,3 +75,87 @@ Then create a corresponding GET endpoint to retrieve a customers order by ID.
 5) **PUT /api/cakes/order/{order_id}**  
 Your bakers will need to be able to change the status of the orders. Provide an endpoint for this. Also, your customers
 would like to keep track of the status of their order. Change the existing endpoint accordingly.  
+
+How to run this project:
+------------------------
+Please use 'composer install' to install dependencies.
+
+If every thing is OK, then use 'php -S localhost:8888 -t public' to run webserver.
+
+Test has been done with Postman.
+
+For **POST /api/cakes/order**:
+
+request should be like this:
+[
+  {
+    "type": "CHEESECAKE",
+    "pastry": "SHORTCRUST",
+    "topping": null,
+    "filling": "CHEESE CAKE CREME",
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "ECLAIRS",
+    "pastry": "CHOUX PASTRY",
+    "topping": "CHOCOLATE",
+    "filling": "BUTTER CREME",
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "ECLAIRS",
+    "pastry": "CHOUX PASTRY",
+    "topping": "CHOCOLATE",
+    "filling": "BUTTER CREME",
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "ECLAIRS",
+    "pastry": "CHOUX PASTRY",
+    "topping": "CHOCOLATE",
+    "filling": "BUTTER CREME",
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "CUPCAKES",
+    "pastry": "SPONGE",
+    "topping": "ICING",
+    "filling": null,
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "ECLAIRS",
+    "pastry": "CHOUX PASTRY",
+    "topping": "CHOCOLATE",
+    "filling": "BUTTER CREME",
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "CHEESECAKE",
+    "pastry": "SHORTCRUST",
+    "topping": null,
+    "filling": "CHEESE CAKE CREME",
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "CHEESECAKE",
+    "pastry": "SHORTCRUST",
+    "topping": null,
+    "filling": "CHEESE CAKE CREME",
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "CUPCAKES",
+    "pastry": "SPONGE",
+    "topping": "ICING",
+    "filling": null,
+    "cremeFlavor": "PLAIN"
+  },
+  {
+    "type": "MILLE-FEUILLES",
+    "pastry": "PUFF PASTRY",
+    "topping": "FRUITS",
+    "filling": "BUTTER CREME",
+    "cremeFlavor": "PLAIN"
+  }
+]
